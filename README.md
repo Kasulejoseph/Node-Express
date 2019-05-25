@@ -1,4 +1,4 @@
-# Node-Class
+# Notes app
 This branch creates a simple notes app using javascript's file system.
 
 ## Setup
@@ -7,7 +7,7 @@ This branch creates a simple notes app using javascript's file system.
 To clone and install:
 
 ```
-git clone https://github.com/yunity/karrot-frontend.git
+git clone https://github.com/Kasulejoseph/Node-Class.git
 cd notes-app
 yarn or npm install
 ```
