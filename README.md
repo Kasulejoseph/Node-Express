@@ -16,7 +16,11 @@ To run the local dev server make actions:
 
 ```
 add a note
-node add --title="note-title" --body="note-body"
+node app.js add --title="note-title" --body="note-body"
 remove a note
-node remove --title="notes-title"
+node app.js remove --title="notes-title"
+list notes
+node app.js list
+read notes
+node app.js read --title="notes-title"
 ```

@@ -28,7 +28,7 @@ yargs.command({
     builder: {
         title: {
             demandOption: true,
-            type: 'string',
+            type: 'string'
         }
     },
     handler(argv) {notesUtils.removeNotes(argv.title)}
@@ -36,16 +36,24 @@ yargs.command({
 
 // List all notes 
 yargs.command({
-    command: 'get',
+    command: 'list',
     description: 'List all notes',
-    handler: () => console.log('List all notes...')
+    handler: () => {
+        notesUtils.listNotes()
+    }
 })
 
 // read a note
 yargs.command({
     command: 'read',
     description: 'Read a note',
-    handler: () => console.log('Reading a note...')
+    builder: {
+        title: {
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (yargs) => notesUtils.readNotes(yargs.title)
 })
 
 // console.log(process.argv[process.argv.length-1])
