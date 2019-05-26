@@ -1,0 +1,24 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kasulejoseph/Node-Class.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kasulejoseph/Node-Class/issues"
+  },
+  "homepage": "https://github.com/Kasulejoseph/Node-Class#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "request": "^2.88.0"
+  }
+}
