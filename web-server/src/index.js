@@ -2,6 +2,9 @@ const express = require('express')
 const path = require('path')
 const app = express()
 const hbs = require('hbs')
+const geoCode = require('./utils/geocode')
+const foreCast = require('./utils/forecast')
+const port = process.env.PORT || 3000
 
 // Define path for express config
 const publicDirPath = path.join(__dirname, '../public')
@@ -46,10 +49,29 @@ app.get('/help', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
-    res.send({
-        forecast: 'it is about morning',
-        location: 'kigali',
-        name: 'Kasule Joe'
+    if(!req.query.address) {
+        return res.send({
+            error: 'No query params provided'
+        })
+    }
+    geoCode(req.query.address, (error, {Latitude, Longtitude, location}={}) => {
+        if (error) {
+            return res.send({
+                error
+            })
+        }
+        foreCast(Latitude, Longtitude, (error, forecastData) => {
+            if (error) {
+                return res.send({
+                    error
+                })
+            }
+            return res.send({
+                location,
+                forecast: forecastData
+            })
+        })
+
     })
 })
 
@@ -69,6 +91,6 @@ app.get('*', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
-    console.log('Server is running at port 3000')
+app.listen(port, () => {
+    console.log(`Server is running at port ${port}`)
 })
