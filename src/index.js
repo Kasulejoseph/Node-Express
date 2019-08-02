@@ -1,9 +1,11 @@
-const express = require('express')
-const path = require('path')
+import express from 'express'
+import path from 'path'
+import hbs from 'hbs'
+
+import foreCast from './utils/forecast'
+import geoCode from './utils/geocode'
+
 const app = express()
-const hbs = require('hbs')
-const geoCode = require('./utils/geocode')
-const foreCast = require('./utils/forecast')
 const port = process.env.PORT || 3000
 
 // Define path for express config
@@ -94,3 +96,5 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at port ${port}`)
 })
+
+export default app
