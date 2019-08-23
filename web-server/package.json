@@ -7,8 +7,8 @@
     "npm": "6.x"
   },
   "scripts": {
-    "server": "node ./src/index.js",
-    "start": "nodemon --exec babel-node ./src/index.js",
+    "server": "NODE_ENV=production node ./src/index.js",
+    "start": "NODE_ENV=development nodemon --exec babel-node ./src/index.js",
     "build": "babel src --out-dir ./dist --source-maps",
     "test": "./node_modules/.bin/mocha --require @babel/register"
   },
