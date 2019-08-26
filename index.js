@@ -2,7 +2,6 @@ import express from 'express'
 import './src/db/mongoose'
 import User from './models/user'
 import Task from './models/task'
-import { log } from 'util';
 
 const app = express()
 const port = process.env.PORT || 8000
@@ -62,8 +61,8 @@ app.get('/users/:id', (req, res) => {
             data: user
         })
     }).catch((error) => {
-        res.status(404).send({
-            status: 404,
+        res.status(500).send({
+            status: 500,
             error: error
         })
     })
@@ -83,6 +82,51 @@ app.post('/task', (req, res) => {
             error: e.message
         })
 
+    })
+})
+
+app.get('/task', (req, res) => {
+    let taskCount;
+    Task.countDocuments({}, (error, count) => {
+        taskCount = count
+        
+    });
+    Task.find({}).then((tasks) => {
+        res.status(200).send({
+            status: 200,
+            task_count: taskCount,
+            data: tasks
+        })
+
+    }).catch((e) => {
+        res.status(500).send({
+            status: 500,
+            error: e
+        })
+
+    })
+})
+
+app.get('/task/:id', (req, res) => {
+    const _id = req.params.id
+    Task.findById(_id).then((task) => {
+        if(!task) {
+            return res.status(404).send({
+                status: 404,
+                data: `Task with id ${_id} Not Found`
+            })
+            
+        }
+        res.status(200).send({
+            status: 200,
+            data: task
+        })
+
+    }).catch((e) => {
+        res.status(404).send({
+            status: 404,
+            error: e
+        })
     })
 })
 app.listen(port, () => {
