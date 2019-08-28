@@ -165,6 +165,46 @@ app.patch('/users/:id', async (req, res) => {
     }
 })
 
+app.patch('/tasks/:id', async (req, res) => {
+    const _id = req.params.id
+    const updateKeys = Object.keys(req.body)
+    const requiredKeys = ['desc', 'complete']
+
+    const isValidUpdateObj = updateKeys.every((update) => requiredKeys.includes(update))
+    if (req.headers['content-type'] !== 'application/json') {
+        return res.status(406).send({
+            status: 406,
+            error: 'Content type should be application/json'
+        }) 
+    }
+    if(!isValidUpdateObj) {
+        return res.status(400).send({
+            status: 400,
+            error: 'Invalid Updates Included!!'
+        }) 
+    }
+    try {
+        const task = await Task.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true})
+        if(!task) {
+            return res.status(404).send({
+                status: 404,
+                error: `Task With Id ${_id} Is Not Found`
+            })
+        }
+        res.status(200).send({
+            status: 200,
+            data: task
+        })
+        
+    } catch (error) {
+        res.status(400).send({
+            status: 400,
+            error: error
+        })  
+    }
+
+})
+
 app.listen(port, () => {
     console.log(`Runing on port ${port}`);
     
