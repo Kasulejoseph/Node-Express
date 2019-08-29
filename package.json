@@ -22,6 +22,7 @@
   "scripts": {
     "start": "NODE_ENV=developmmet nodemon --exec babel-node index.js",
     "test": "mocha",
+    "build": "babel src --out-dir ./dist --source-maps",
     "promise-chaining": "nodemon --exec babel-node playground/promise-chaining-2.js "
   },
   "repository": {
