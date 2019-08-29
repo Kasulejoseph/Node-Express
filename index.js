@@ -205,6 +205,29 @@ app.patch('/tasks/:id', async (req, res) => {
 
 })
 
+
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id)
+        if(!user) {
+            return res.status(404).send({
+                status: 404,
+                error: `User With Id ${req.params.id} Does Not Exist`
+            })
+        }
+        res.status(200).send({
+            status: 200,
+            data: user
+        })
+        
+    } catch (error) {
+        res.status(500).send({
+            status: 500,
+            error: error
+        })  
+    }
+})
+
 app.listen(port, () => {
     console.log(`Runing on port ${port}`);
     
