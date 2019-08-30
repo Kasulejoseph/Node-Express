@@ -59,52 +59,6 @@ router.get('/task/:id', async (req, res) => {
     }
 })
 
-router.patch('/users/:id', async (req, res) => {
-    const _id = req.params.id
-    const updateObj = req.body
-    const updates = Object.keys(updateObj)
-    const requiredObj = ['name', 'email', 'password', 'age']
-    const isValidUpdate = updates.every((update) => requiredObj.includes(update))
-
-    if(!isValidUpdate) {
-        return res.status(400).send({
-            status: 400,
-            error: 'Invalid Updates Included!!'
-        }) 
-    }
-    if (req.headers['content-type'] !== 'application/json') {
-        return res.status(406).send({
-            status: 406,
-            error: 'Content type should be application/json'
-        }) 
-    }
-    if(!Object.keys(updateObj).length) {        
-        return res.status(400).send({
-            status: 400,
-            error: 'The update object is empty'
-        }) 
-    }
-    
-    try {
-        const user = await User.findByIdAndUpdate(_id, updateObj, { new: true, runValidators: true})
-        if(!user) {
-            return res.status(404).send({
-                status: 404,
-                error: 'User Not Found'
-            })
-        }
-        res.status(200).send({
-            status: 200,
-            data: user
-        })
-    } catch (error) {
-        res.status(400).send({
-            status: 400,
-            error: error
-        }) 
-    }
-})
-
 router.patch('/tasks/:id', async (req, res) => {
     const _id = req.params.id
     const updateKeys = Object.keys(req.body)
@@ -124,7 +78,10 @@ router.patch('/tasks/:id', async (req, res) => {
         }) 
     }
     try {
-        const task = await Task.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true})
+        const task = await Task.findById(_id, { new: true, runValidators: true})
+        updateKeys.forEach((update) => task[update] = req.body[update])
+        task.save()
+        
         if(!task) {
             return res.status(404).send({
                 status: 404,
@@ -143,29 +100,6 @@ router.patch('/tasks/:id', async (req, res) => {
         })  
     }
 
-})
-
-
-router.delete('/users/:id', async (req, res) => {
-    try {
-        const user = await User.findByIdAndDelete(req.params.id)
-        if(!user) {
-            return res.status(404).send({
-                status: 404,
-                error: `User With Id ${req.params.id} Does Not Exist`
-            })
-        }
-        res.status(200).send({
-            status: 200,
-            data: user
-        })
-        
-    } catch (error) {
-        res.status(500).send({
-            status: 500,
-            error: error
-        })  
-    }
 })
 
 router.delete('/tasks/:id', async (req, res) => {
