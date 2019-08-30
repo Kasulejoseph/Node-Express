@@ -1,6 +1,7 @@
 import express from 'express'
 
 import User from '../models/user'
+import { log } from 'util';
 
 const router = express.Router()
 
@@ -132,5 +133,24 @@ router.delete('/users/:id', async (req, res) => {
         })  
     }
 })
+
+router.post('/users/login', async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)        
+        res.status(200).send({
+            status: 200,
+            message: 'Logged in successfully!!',
+            data: user
+        })
+
+    } catch (error) {
+        res.status(400).send({
+            status: 400,
+            data: error
+        })
+        
+    }
+})
+
 
 export default router
