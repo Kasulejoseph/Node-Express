@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 const userSchema = mongoose.Schema({
     name: {
@@ -42,16 +43,35 @@ const userSchema = mongoose.Schema({
                 throw new Error('Age must be greater than zero')
             }
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
+
 })
+
+userSchema.methods.generateAuthToken = async function () {
+    const user = this
+    const token = jwt.sign({ _id: user.id}, 'mySecret@123', {expiresIn: '7 days'})
+    user.tokens = user.tokens.concat({ token })
+    await user.save()
+    return token
+    
+}
 
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({email: email })
     if(!user) {
+        console.log('Unable to login1');
+        
         throw new Error('Unable to login')
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if(!isMatch) {
+        console.log('Unable to login9');
         throw new Error('Unable to login')
     }
     return user
@@ -60,7 +80,10 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.pre('save', async function (next) {
     const user = this
-
+    // TO DO
+    // Fix this
+    console.log('bcrypt', user.password);
+    
     if(user.isModified) {
         user.password = await bcrypt.hash(user.password, 8)
     }

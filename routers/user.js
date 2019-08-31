@@ -8,10 +8,12 @@ const router = express.Router()
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
     try {
+        const token = await user.generateAuthToken()
         await user.save()
         res.status(201).send({
             status: 201,
-            data: user
+            data: user,
+            token
         })
     } catch (error) {
         res.status(400).send({
@@ -136,11 +138,13 @@ router.delete('/users/:id', async (req, res) => {
 
 router.post('/users/login', async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)        
+        const user = await User.findByCredentials(req.body.email, req.body.password)  
+        const token = await user.generateAuthToken()
         res.status(200).send({
             status: 200,
             message: 'Logged in successfully!!',
-            data: user
+            data: user,
+            token
         })
 
     } catch (error) {
