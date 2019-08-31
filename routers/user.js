@@ -1,16 +1,19 @@
 import express from 'express'
 
 import User from '../models/user'
+import auth from '../middleware/auth'
 
 const router = express.Router()
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
     try {
+        const token = await user.generateAuthToken()
         await user.save()
         res.status(201).send({
             status: 201,
-            data: user
+            data: user,
+            token
         })
     } catch (error) {
         res.status(400).send({
@@ -20,21 +23,11 @@ router.post('/users', async (req, res) => {
     }
 })
 
-router.get('/users', async (req, res) => {
-    try {
-        const user_count =  await User.countDocuments({})
-        const users = await User.find({})
-        res.status(200).send({
-            status: 200,
-            user_count: user_count,
-            data: users
-        }) 
-    } catch (error) {
-        res.status(500).send({
-            status: 500,
-            error: error
-        }) 
-    }
+router.get('/users/me', auth, async (req, res) => {
+    res.status(200).send({
+        status: 200,
+        data: req.user
+    }) 
 })
 
 
@@ -132,5 +125,26 @@ router.delete('/users/:id', async (req, res) => {
         })  
     }
 })
+
+router.post('/users/login', async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)  
+        const token = await user.generateAuthToken()
+        res.status(200).send({
+            status: 200,
+            message: 'Logged in successfully!!',
+            data: user,
+            token
+        })
+
+    } catch (error) {
+        res.status(400).send({
+            status: 400,
+            data: error
+        })
+        
+    }
+})
+
 
 export default router
