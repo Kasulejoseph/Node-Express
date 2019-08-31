@@ -1,7 +1,7 @@
 import express from 'express'
 
 import User from '../models/user'
-import { log } from 'util';
+import auth from '../middleware/auth'
 
 const router = express.Router()
 
@@ -23,21 +23,11 @@ router.post('/users', async (req, res) => {
     }
 })
 
-router.get('/users', async (req, res) => {
-    try {
-        const user_count =  await User.countDocuments({})
-        const users = await User.find({})
-        res.status(200).send({
-            status: 200,
-            user_count: user_count,
-            data: users
-        }) 
-    } catch (error) {
-        res.status(500).send({
-            status: 500,
-            error: error
-        }) 
-    }
+router.get('/users/me', auth, async (req, res) => {
+    res.status(200).send({
+        status: 200,
+        data: req.user
+    }) 
 })
 
 
