@@ -59,3 +59,11 @@ typings/
 
 # next.js build output
 .next
+.cache
+.now
+.DS_Store
+.env.build
+.venv
+npm-debug.log
+node_modules
+

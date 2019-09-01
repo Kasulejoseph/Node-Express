@@ -140,7 +140,7 @@ router.post('/users/login', async (req, res) => {
     } catch (error) {
         res.status(400).send({
             status: 400,
-            data: error
+            error: error
         })
         
     }

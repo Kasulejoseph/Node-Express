@@ -9,6 +9,13 @@ const port = process.env.PORT || 8000
 app.use(express.json())
 app.use([userRouter, taskRouter])
 
+app.get('/', async (req, res) => {
+    res.status(200).send({
+        status: 200,
+        data: "Welcome!!!"
+    })
+})
+
 app.listen(port, () => {
     console.log(`Runing on port ${port}`);
     
