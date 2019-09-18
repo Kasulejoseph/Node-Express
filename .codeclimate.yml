@@ -9,4 +9,6 @@ plugins:
 exclude_patterns:
 - "promise.js"
 - "mongodb.js"
+- "dist/"
+- "node_modules/"
 - "playground/"

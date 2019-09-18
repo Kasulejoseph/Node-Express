@@ -154,7 +154,7 @@ router.post('/users/logout', auth, async(req, res) => {
         })
         await req.user.save()
         res.send({
-            message: "logged out"
+            message: 'logged out'
         })
     } catch (error) {
         res.status(500).send({
@@ -169,7 +169,7 @@ router.post('/users/logoutAll', auth, async(req, res) => {
     try {
         await req.user.save()
         res.send({
-            message: "logged out all"
+            message: 'logged out all'
         }) 
     } catch (error) {
         res.status(500).send({
