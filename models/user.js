@@ -55,7 +55,7 @@ const userSchema = mongoose.Schema({
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign({ _id: user.id}, 'mySecret@123', {expiresIn: '7 days'})
+    const token = jwt.sign({ _id: user.id}, 'mySecret@123', {expiresIn: '14 days'})    
     user.tokens = user.tokens.concat({ token })
     await user.save()
     return token
@@ -64,28 +64,20 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({email: email })
-    if(!user) {
-        console.log('Unable to login1');
-        
-        throw new Error('Unable to login')
+    if(!user) {        
+        throw ('Invalid credentials')
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if(!isMatch) {
-        console.log('Unable to login9');
-        throw new Error('Unable to login')
+        throw ('Invalid credentials')
     }
     return user
-
 }
 
 userSchema.pre('save', async function (next) {
     const user = this
-    // TO DO
-    // Fix this
-    console.log('bcrypt', user.password);
-    
-    if(user.isModified) {
-        user.password = await bcrypt.hash(user.password, 8)
+    if(this.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 8) 
     }
     next()
 

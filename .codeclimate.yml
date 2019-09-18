@@ -1,0 +1,14 @@
+plugins: 
+  eslint:
+    enabled: true
+    channel: "eslint-5"
+
+  config:
+    config: .eslintrc
+
+exclude_patterns:
+- "promise.js"
+- "mongodb.js"
+- "dist/"
+- "node_modules/"
+- "playground/"

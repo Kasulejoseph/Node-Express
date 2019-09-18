@@ -1,5 +1,9 @@
 # Node-Class
 
+### Badges
+[![Maintainability](https://api.codeclimate.com/v1/badges/21e1b64a7693a65d2b15/maintainability)](https://codeclimate.com/github/Kasulejoseph/Node-Class/maintainability)
+
+
 start mongodb locally -> `/Users/kasule/mongodb/bin/mongod --dbpath=/Users/kasule/mongodb-data/`
 
 node src/db/mongoose.js

@@ -16,7 +16,7 @@
 // })
 
 const sum = (a, b) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         setTimeout(() => {
             resolve(a + b)
         }, 2000)
@@ -44,17 +44,17 @@ const sum = (a, b) => {
 /* Promise chaining*/
 
 sum(1, 2).then((result) => {
-    console.log(result);
+    console.log(result)
     return sum(result, 10)
     
 }).then((result2) => {
-    console.log(result2);
+    console.log(result2)
     return sum(result2, 10)
 
 }).then((result3) => {
-    console.log(result3);
+    console.log(result3)
 }).catch((e) => {
-    console.log(e); 
+    console.log(e)
 })
 
 
