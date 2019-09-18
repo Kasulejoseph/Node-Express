@@ -147,4 +147,6 @@ router.post('/users/login', async (req, res) => {
 })
 
 
+router.post('/users/logout', auth)
+
 export default router
