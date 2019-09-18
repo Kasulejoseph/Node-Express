@@ -5,3 +5,8 @@ plugins:
 
   config:
     config: .eslintrc
+
+exclude_patterns:
+- "promise.js"
+- "mongodb.js"
+- "playground/"
