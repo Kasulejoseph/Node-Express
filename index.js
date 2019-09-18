@@ -12,11 +12,11 @@ app.use([userRouter, taskRouter])
 app.get('/', async (req, res) => {
     res.status(200).send({
         status: 200,
-        data: "Welcome!!!"
+        data: 'Welcome!!!'
     })
 })
 
 app.listen(port, () => {
-    console.log(`Runing on port ${port}`);
+    console.log(`Runing on port ${port}`)
     
 })
