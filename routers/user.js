@@ -54,8 +54,7 @@ router.get('/users/:id', async (req, res) => {
     }
 })
 
-router.patch('/users/:id', async (req, res) => {
-    const _id = req.params.id
+router.patch('/users/me', auth, async (req, res) => {
     const updateObj = req.body
     const updates = Object.keys(updateObj)
     const requiredObj = ['name', 'email', 'password', 'age']
@@ -81,41 +80,30 @@ router.patch('/users/:id', async (req, res) => {
     }
     
     try {
-        const user = await User.findById(_id, { new: true, runValidators: true})        
+        const user = req.user       
         updates.forEach((update) => user[update] = updateObj[update])
         await user.save()
-        
-        if(!user) {
-            return res.status(404).send({
-                status: 404,
-                error: 'User Not Found'
-            })
-        }
         res.status(200).send({
             status: 200,
-            data: user
+            message: 'success',
+            data: req.user
         })
     } catch (error) {
         res.status(400).send({
             status: 400,
-            error: error
+            error
         }) 
     }
 })
 
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/me', auth, async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id)
-        if(!user) {
-            return res.status(404).send({
-                status: 404,
-                error: `User With Id ${req.params.id} Does Not Exist`
-            })
-        }
+        await req.user.remove()
         res.status(200).send({
             status: 200,
-            data: user
+            message: 'successfully removed.. ',
+            data: req.user
         })
         
     } catch (error) {
