@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const Task = mongoose.model('Tasks', {
+const taskSchema = mongoose.Schema({
     desc: {
         type: String,
         required: true,
@@ -16,6 +16,14 @@ const Task = mongoose.model('Tasks', {
         required: true,
         ref: 'Users'
     }
-})
+}, {timestamps : true})
+
+taskSchema.methods.toJSON = function () {
+    const task = this
+    const taskObj = task.toObject()
+    delete taskObj.__v
+    return taskObj
+}
+const Task = mongoose.model('Tasks', taskSchema)
 
 export default Task

@@ -4,10 +4,10 @@ import Task from '../models/task'
 
 const router = express.Router()
 
-router.post('/task', auth, async (req, res) => {
+router.post('/task', auth, async (req, res) => { 
     const task = new Task({
         ...req.body,
-        author: req.user._id
+        author: req.user
     })
     try {
         await task.save()
@@ -25,12 +25,31 @@ router.post('/task', auth, async (req, res) => {
 
 router.get('/task', auth, async (req, res) => {
     try {
-        const task_count = await Task.countDocuments({author: req.user._id})
-        const tasks = await Task.find({ author: req.user._id})
+        // const tasks = await Task.find({ author: req.user._id})
+        const match = {}
+        const sort = {}
+
+        if(req.query.complete) {
+            match.complete = req.query.complete === 'true'
+        }
+        if(req.query.sort) {
+            const parts = req.query.sort.split(':')
+            sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
+        }
+        await req.user.populate({
+            path: 'tasks',
+            match, 
+            options: {
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip),
+                sort
+            }
+        }).execPopulate()        
+        const task_count = req.user.tasks.length
         res.status(200).send({
             status: 200,
             task_count: task_count,
-            data: tasks
+            data: req.user.tasks
         })
     } catch (error) {
         res.status(500).send({
