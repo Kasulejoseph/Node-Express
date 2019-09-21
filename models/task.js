@@ -18,6 +18,12 @@ const taskSchema = mongoose.Schema({
     }
 }, {timestamps : true})
 
+taskSchema.methods.toJSON = function () {
+    const task = this
+    const taskObj = task.toObject()
+    delete taskObj.__v
+    return taskObj
+}
 const Task = mongoose.model('Tasks', taskSchema)
 
 export default Task

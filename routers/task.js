@@ -25,12 +25,21 @@ router.post('/task', auth, async (req, res) => {
 
 router.get('/task', auth, async (req, res) => {
     try {
-        const task_count = await Task.countDocuments({author: req.user._id})
-        const tasks = await Task.find({ author: req.user._id})
+        // const tasks = await Task.find({ author: req.user._id})
+        const match = {}
+
+        if(req.query.complete) {
+            match.complete = req.query.complete === 'true'
+        }
+        await req.user.populate({
+            path: 'tasks',
+            match
+        }).execPopulate()        
+        const task_count = req.user.tasks.length
         res.status(200).send({
             status: 200,
             task_count: task_count,
-            data: tasks
+            data: req.user.tasks
         })
     } catch (error) {
         res.status(500).send({
