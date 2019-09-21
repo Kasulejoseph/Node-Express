@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization')  
         const tokenPayload = jwt.verify(token, process.env.SECRETKEY)
-        const user = await User.findOne({ _id: tokenPayload._id, 'tokens.token': token})
+        const user = await User.findOne({ _id: tokenPayload._id, 'tokens.token': token})        
         if (!user) {
             throw ('Authentication error...')
         }

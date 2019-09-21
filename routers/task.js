@@ -1,11 +1,14 @@
 import express from 'express'
-
+import auth from '../middleware/auth'
 import Task from '../models/task'
 
 const router = express.Router()
 
-router.post('/task', async (req, res) => {
-    const task = new Task(req.body)
+router.post('/task', auth, async (req, res) => {
+    const task = new Task({
+        ...req.body,
+        author: req.user._id
+    })
     try {
         await task.save()
         res.status(201).send({
@@ -20,10 +23,10 @@ router.post('/task', async (req, res) => {
     }
 })
 
-router.get('/task', async (req, res) => {
+router.get('/task', auth, async (req, res) => {
     try {
-        const task_count = await Task.countDocuments({})
-        const tasks = await Task.find({})
+        const task_count = await Task.countDocuments({author: req.user._id})
+        const tasks = await Task.find({ author: req.user._id})
         res.status(200).send({
             status: 200,
             task_count: task_count,
@@ -37,16 +40,18 @@ router.get('/task', async (req, res) => {
     }
 })
 
-router.get('/task/:id', async (req, res) => {
+router.get('/task/:id', auth, async (req, res) => {
     const _id = req.params.id
     try {
-        const task = await Task.findById(_id)
+        // const task = await Task.findOne({_id, author: req.user._id})
+        const task = await req.user.populate('tasks').execPopulate()
         if(!task) {
             return res.status(404).send({
                 status: 404,
                 data: `Task with id ${_id} Not Found`
             })
         }
+        await task.populate('author').execPopulate()
         res.status(200).send({
             status: 200,
             data: task
@@ -54,12 +59,12 @@ router.get('/task/:id', async (req, res) => {
     } catch (error) {
         res.status(500).send({
             status: 500,
-            error: error
-    })    
+            error
+        })    
     }
 })
 
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id
     const updateKeys = Object.keys(req.body)
     const requiredKeys = ['desc', 'complete']
@@ -78,16 +83,16 @@ router.patch('/tasks/:id', async (req, res) => {
         }) 
     }
     try {
-        const task = await Task.findById(_id, { new: true, runValidators: true})
-        updateKeys.forEach((update) => task[update] = req.body[update])
-        task.save()
-        
+        // const task = await Task.findById(_id, { new: true, runValidators: true})
+        const task = await Task.findOne({ _id, author: req.user._id}, {new: true, runValidators: true})
         if(!task) {
             return res.status(404).send({
                 status: 404,
                 error: `Task With Id ${_id} Is Not Found`
             })
         }
+        updateKeys.forEach((update) => task[update] = req.body[update])
+        task.save()
         res.status(200).send({
             status: 200,
             data: task
@@ -96,15 +101,15 @@ router.patch('/tasks/:id', async (req, res) => {
     } catch (error) {
         res.status(400).send({
             status: 400,
-            error: error
+            error
         })  
     }
 
 })
 
-router.delete('/tasks/:id', async (req, res) => {
+router.delete('/tasks/:id', auth, async (req, res) => {
     try {
-        const task = await Task.findByIdAndDelete(req.params.id)
+        const task = await Task.findOneAndDelete({_id: req.params.id, author: req.user._id})
         if(!task) {
             return res.status(404).send({
                 status: 404,
@@ -119,7 +124,7 @@ router.delete('/tasks/:id', async (req, res) => {
     } catch (error) {
         res.status(500).send({
             status: 500,
-            error: error
+            error
         })  
     }
 })

@@ -24,9 +24,10 @@ router.post('/users', async (req, res) => {
 })
 
 router.get('/users/me', auth, async (req, res) => {
+    await req.user.populate('tasks').execPopulate()
     res.status(200).send({
         status: 200,
-        data: req.user
+        data: {user: req.user, tasks: req.user.tasks}
     }) 
 })
 
