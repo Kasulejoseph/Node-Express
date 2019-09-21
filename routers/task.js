@@ -4,10 +4,10 @@ import Task from '../models/task'
 
 const router = express.Router()
 
-router.post('/task', auth, async (req, res) => {
+router.post('/task', auth, async (req, res) => { 
     const task = new Task({
         ...req.body,
-        author: req.user._id
+        author: req.user
     })
     try {
         await task.save()
