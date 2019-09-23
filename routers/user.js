@@ -189,6 +189,22 @@ router.delete('/users/me/avatar', auth, async(req, res) => {
     })
 })
 
+router.get('/users/:id/avatar', async(req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user || !user.avatar) {
+            return res.status(404).send({
+                error: 'No image found'
+            })
+        }
+        res.set('Content-Type', 'image/jpg')
+        res.send(user.avatar)
+    } catch (error) {
+        res.status(400).send()
+        
+    }
+})
+
 router.all('/users/me/*', (_req, res, next) => {
     res.status(405).send({
         status: 405,
