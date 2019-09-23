@@ -2,6 +2,7 @@ import express from 'express'
 
 import User from '../models/user'
 import auth from '../middleware/auth'
+import upload from '../middleware/upload'
 
 const router = express.Router()
 
@@ -165,6 +166,24 @@ router.post('/users/logoutAll', auth, async(req, res) => {
             error
         })
     }
+})
+
+router.post('/users/me/avatar', upload.single('avatar'), (_req, res) => {
+    res.send()
+}, (err, _req, res, next) => {
+    res.status(400).send({
+        status: 400,
+        error: err.message
+    })
+})
+
+router.all('/users/me/*', (_req, res, next) => {
+    res.status(405).send({
+        status: 405,
+        error: 'Method Not Allowed'
+        
+    })
+    next()
 })
 
 export default router
