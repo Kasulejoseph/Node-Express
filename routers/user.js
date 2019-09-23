@@ -168,12 +168,24 @@ router.post('/users/logoutAll', auth, async(req, res) => {
     }
 })
 
-router.post('/users/me/avatar', upload.single('avatar'), (_req, res) => {
-    res.send()
-}, (err, _req, res, next) => {
+router.post('/users/me/avatar', auth, upload.single('avatar'), async(req, res) => {
+    req.user.avatar = req.file.buffer
+    await req.user.save()
+    res.send({
+        message: 'Successfully saved!'
+    })
+}, (err, _req, res, _next) => {
     res.status(400).send({
         status: 400,
         error: err.message
+    })
+})
+
+router.delete('/users/me/avatar', auth, async(req, res) => {
+    req.user.avatar = undefined
+    await req.user.save()
+    res.send({
+        'message': 'Delete successfully!!'
     })
 })
 

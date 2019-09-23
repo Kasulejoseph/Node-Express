@@ -1,7 +1,6 @@
 import multer from 'multer'
 
 export default multer({
-    dest: 'avatars/',
     limits: {
         fileSize: 1000000
     },
