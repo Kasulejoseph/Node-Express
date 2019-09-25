@@ -2,6 +2,8 @@ import express from 'express'
 
 import User from '../models/user'
 import auth from '../middleware/auth'
+import upload from '../middleware/upload'
+import sharp from 'sharp'
 
 const router = express.Router()
 
@@ -165,6 +167,53 @@ router.post('/users/logoutAll', auth, async(req, res) => {
             error
         })
     }
+})
+
+router.post('/users/me/avatar', auth, upload.single('avatar'), async(req, res) => {
+    const buffer = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer()
+    req.user.avatar = buffer
+    await req.user.save()
+    res.send({
+        message: 'Successfully saved!'
+    })
+}, (err, _req, res, _next) => {
+    res.status(400).send({
+        status: 400,
+        error: err.message
+    })
+})
+
+router.delete('/users/me/avatar', auth, async(req, res) => {
+    req.user.avatar = undefined
+    await req.user.save()
+    res.send({
+        'message': 'Delete successfully!!'
+    })
+})
+
+router.get('/users/:id/avatar', async(req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user || !user.avatar) {
+            return res.status(404).send({
+                error: 'No image found'
+            })
+        }
+        res.set('Content-Type', 'image/png')
+        res.send(user.avatar)
+    } catch (error) {
+        res.status(400).send()
+        
+    }
+})
+
+router.all('/users/me/*', (_req, res, next) => {
+    res.status(405).send({
+        status: 405,
+        error: 'Method Not Allowed'
+        
+    })
+    next()
 })
 
 export default router
