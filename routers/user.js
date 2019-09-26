@@ -1,14 +1,15 @@
 import express from 'express'
-
+import sharp from 'sharp'
 import User from '../models/user'
 import auth from '../middleware/auth'
 import upload from '../middleware/upload'
-import sharp from 'sharp'
+import sendWelcomeEmail from '../emails/account'
 
 const router = express.Router()
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
+    sendWelcomeEmail(user.email, 'Welcome...!!', `Welcome to our app, ${user.name}. Let us if you have any query on how to use it...`)
     try {
         const token = await user.generateAuthToken()
         await user.save()
@@ -102,6 +103,7 @@ router.patch('/users/me', auth, async (req, res) => {
 
 router.delete('/users/me', auth, async (req, res) => {
     try {
+        sendWelcomeEmail(req.user.email, 'Success...!!', `Your account was deleted, ${req.user.name}. Anything we would have done better?`)
         await req.user.remove()
         res.status(200).send({
             status: 200,
@@ -120,7 +122,7 @@ router.delete('/users/me', auth, async (req, res) => {
 router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)  
-        const token = await user.generateAuthToken()
+        const token = await user.generateAuthToken()        
         res.status(200).send({
             status: 200,
             message: 'Logged in successfully!!',
