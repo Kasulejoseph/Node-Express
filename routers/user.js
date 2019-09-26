@@ -9,6 +9,7 @@ const router = express.Router()
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
+    sendWelcomeEmail(user.email, 'Welcome...!!', `Welcome to our app, ${user.name}. Let us if you have any query on how to use it...`)
     try {
         const token = await user.generateAuthToken()
         await user.save()
@@ -122,7 +123,6 @@ router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)  
         const token = await user.generateAuthToken()        
-        sendWelcomeEmail(user.email, 'Welcome...!!', `Welcome to our app, ${user.name}. Let us if you have any query on how to use it...`)
         res.status(200).send({
             status: 200,
             message: 'Logged in successfully!!',
