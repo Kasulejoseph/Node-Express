@@ -12,6 +12,7 @@ const db_url = process.env.NODE_ENV === 'production'?
 mongoose.connect(db_url, {
     useNewUrlParser: true,
     useCreateIndex: true,
+    useUnifiedTopology: true,
     useFindAndModify: false,
     dbName: 'task-manager-api'
 })
