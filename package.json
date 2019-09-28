@@ -27,7 +27,8 @@
     "jest": "^24.9.0",
     "mocha": "^6.2.0",
     "nodemon": "^1.19.1",
-    "regenerator-runtime": "^0.13.3"
+    "regenerator-runtime": "^0.13.3",
+    "supertest": "^4.0.2"
   },
   "jest": {
     "testEnvironment": "node"

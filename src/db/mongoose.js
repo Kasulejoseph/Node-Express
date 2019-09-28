@@ -17,6 +17,6 @@ mongoose.connect(db_url, {
     useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    dbName: 'task-manager-api'
+    dbName: 'task-manager-api-test'
 })
     .catch(error => console.log(error))
