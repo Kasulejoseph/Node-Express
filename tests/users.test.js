@@ -1,27 +1,9 @@
 import request from 'supertest'
-import jwt from 'jsonwebtoken'
-import mongoose from 'mongoose'
 import app from '../app'
 import User from '../models/user'
-import dotenv from 'dotenv'
-const userId = mongoose.Types.ObjectId()
+import {userId, loggedUser, setupDatabase} from './fixtures/db'
 
-dotenv.config()
-const loggedUser = {
-    _id: userId,
-    email: 'joseph@g.com',
-    name: 'joseph',
-    password: '12qwert@!',
-    tokens: [{
-        token: jwt.sign({_id: userId}, process.env.SECRETKEY)
-    }]
-}
-
-beforeEach(async() => {
-    await User.deleteMany()
-    await new User(loggedUser).save()
-
-})
+beforeEach(setupDatabase)
 test('user should create a account', async () => {
     const response = await request(app).post('/users').send({
         name: 'kasule', 

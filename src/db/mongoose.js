@@ -10,7 +10,6 @@ let db_url = process.env.NODE_ENV === 'production'? process.env.MONGODB_URL : pr
 if(process.env.NODE_ENV === 'testing'){
     db_url = process.env.TEST_URL
 }
-console.log(db_url)
 
 mongoose.connect(db_url, {
     useNewUrlParser: true,
