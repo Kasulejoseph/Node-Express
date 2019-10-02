@@ -10,5 +10,6 @@ exclude_patterns:
 - "promise.js"
 - "mongodb.js"
 - "dist/"
+- "tests/"
 - "node_modules/"
 - "playground/"
