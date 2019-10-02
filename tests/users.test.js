@@ -92,3 +92,37 @@ test('should not delete a user when not authenticated', async() => {
     const user = await User.findById(userId)    
     expect(user).not.toBeNull()
 })
+
+test('should upload an avatar', async () => {
+    await request(app)
+        .post('/users/me/avatar')
+        .set('Authorization', loggedUser.tokens[0].token)
+        .attach('avatar', 'tests/fixtures/slack.png')
+        .expect(200)
+    const user = await User.findById(userId)      
+    expect(user.avatar).toEqual(expect.any(Buffer))
+})
+
+test('should update valid user', async() => {
+    const response = await request(app)
+        .patch('/users/me')
+        .set('Authorization', loggedUser.tokens[0].token)
+        .send({
+            name: 'kasule'
+        })
+        .expect(200)
+    const user = await User.findById(userId)      
+    expect(user.name).toEqual('kasule')
+    expect(response.body.data.name).toBe('kasule')
+})
+
+test('should not update invalid user fields', async() => {
+    const response = await request(app)
+        .patch('/users/me')
+        .set('Authorization', loggedUser.tokens[0].token)
+        .send({
+            location: 'kampala'
+        })
+        .expect(400)
+    expect(response.body['error']).toBe('Invalid Updates Included!!')
+})
