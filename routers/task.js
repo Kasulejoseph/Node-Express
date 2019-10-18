@@ -49,7 +49,8 @@ router.get('/task', auth, async (req, res) => {
         res.status(200).send({
             status: 200,
             task_count: task_count,
-            data: req.user.tasks
+            data: req.user.tasks, 
+            author: req.user
         })
     } catch (error) {
         res.status(500).send({

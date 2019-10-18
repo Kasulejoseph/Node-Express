@@ -5,7 +5,7 @@ dotenv.config()
 
 
 
-let db_url = process.env.NODE_ENV === 'production'? process.env.MONGODB_URL : process.env.LOCAL_URL
+let db_url = process.env.NODE_ENV === 'production'? process.env.LOCAL_URL : process.env.LOCAL_URL
 
 if(process.env.NODE_ENV === 'testing'){
     db_url = process.env.TEST_URL
