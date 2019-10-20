@@ -1,5 +1,5 @@
 import app from './app'
-
+import 'regenerator-runtime/runtime'
 const port = process.env.PORT
 
 app.listen(port, () => {

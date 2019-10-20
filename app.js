@@ -1,5 +1,4 @@
 import express from 'express'
-import 'regenerator-runtime/runtime'
 import './src/db/mongoose'
 import userRouter from './routers/user'
 import taskRouter from './routers/task'
