@@ -2,6 +2,7 @@
 
 ### Badges
 [![Maintainability](https://api.codeclimate.com/v1/badges/21e1b64a7693a65d2b15/maintainability)](https://codeclimate.com/github/Kasulejoseph/Node-Class/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/21e1b64a7693a65d2b15/test_coverage)](https://codeclimate.com/github/Kasulejoseph/Node-Class/test_coverage)
 
 
 start mongodb locally -> `/Users/kasule/mongodb/bin/mongod --dbpath=/Users/kasule/mongodb-data/`
