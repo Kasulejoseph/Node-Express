@@ -39,7 +39,7 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec babel-node index.js",
     "test": "NODE_ENV=testing jest --runInBand --detectOpenHandles",
-    "coverage": "NODE_ENV=testing npx jest --coverage --runInBand --detectOpenHandles",
+    "coverage": "NODE_ENV=testing npx jest --coverage --runInBand --detectOpenHandles --forceExit",
     "start:prod": "node --require @babel/register index.js",
     "build": "babel *.js --out-dir ./dist --source-maps",
     "lint": "eslint src/**/*.js *.js",
