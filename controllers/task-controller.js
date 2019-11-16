@@ -4,16 +4,14 @@ class Tasks {
     constructor() {
         // this.task = new Task()
     }
-    static async readTask(req, res) {        
+    static async readTask(req, res) {
         try {
             // const tasks = await Task.find({ author: req.user._id})
             let count = 0
-            if(req.user.tasks) {
+            if (req.user.tasks) {
                 count = await req.user.tasks.length
             }
-            const paginateObj =  paginate(req)
-            console.log(paginateObj);
-            
+            const paginateObj = paginate(req)
             await req.user.populate({
                 path: 'tasks',
                 match: paginateObj.match,
@@ -25,18 +23,18 @@ class Tasks {
             }).execPopulate()
             res.status(200).send({
                 status: 200,
-                meta:{
+                meta: {
                     count,
                     prevPage: paginateObj.prevPage,
                     nextPage: paginateObj.nextPage
-                    
+
                 },
                 data: req.user.tasks
             })
         } catch (error) {
             res.status(500).send({
                 status: 500,
-                error: error
+                error: 'sorry!! something went wrong'
             })
         }
     }
@@ -104,7 +102,13 @@ class Tasks {
         }
         try {
             // const task = await Task.findById(_id, { new: true, runValidators: true})
-            const task = await Task.findOne({ _id, author: req.user._id }, { new: true, runValidators: true })
+            const task = await Task.findOne({
+                _id,
+                author: req.user._id
+            }, {
+                new: true,
+                runValidators: true
+            })
             if (!task) {
                 return res.status(404).send({
                     status: 404,
@@ -128,7 +132,10 @@ class Tasks {
 
     static async deleteTask(req, res) {
         try {
-            const task = await Task.findOneAndDelete({ _id: req.params.id, author: req.user._id })
+            const task = await Task.findOneAndDelete({
+                _id: req.params.id,
+                author: req.user._id
+            })
             if (!task) {
                 return res.status(404).send({
                     status: 404,

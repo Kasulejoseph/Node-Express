@@ -16,5 +16,12 @@ export default (req) => {
     const nextPage = `skip=${limit}?limit=${nextLimit}`
     const prevPage = `skip=${prevSkip}?limit=${prevLimit}`
 
-    return {match, sort, limit, skip, nextPage, prevPage}
+    return {
+        match,
+        sort,
+        limit,
+        skip,
+        nextPage,
+        prevPage
+    }
 }

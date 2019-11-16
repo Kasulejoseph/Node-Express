@@ -1,7 +1,7 @@
 import User from '../models/user'
 import sendWelcomeEmail from '../emails/account'
 
-class Users{
+class Users {
     constructor() {
         // this.state = {};  
     }
@@ -29,14 +29,17 @@ class Users{
             await req.user.populate('tasks').execPopulate()
             res.status(200).send({
                 status: 200,
-                data: {user: req.user, tasks: req.user.tasks}
+                data: {
+                    user: req.user,
+                    tasks: req.user.tasks
+                }
             })
-            
+
         } catch (error) {
             res.status(500).send({
                 status: 500,
                 error: 'Oops.. something went wrong'
-            })  
+            })
         }
 
     }
@@ -45,7 +48,7 @@ class Users{
         const _id = req.params.id
         try {
             const user = await User.findById(_id)
-            if(!user) {
+            if (!user) {
                 return res.status(404).send({
                     status: 404,
                     error: 'User Not Found'
@@ -55,7 +58,7 @@ class Users{
                 status: 200,
                 data: user
             })
-            
+
         } catch (error) {
             res.status(500).send({
                 status: 500,
@@ -69,28 +72,28 @@ class Users{
         const updates = Object.keys(updateObj)
         const requiredObj = ['name', 'email', 'password', 'age']
         const isValidUpdate = updates.every((update) => requiredObj.includes(update))
-    
-        if(!isValidUpdate) {
+
+        if (!isValidUpdate) {
             return res.status(400).send({
                 status: 400,
                 error: 'Invalid Updates Included!!'
-            }) 
+            })
         }
         if (req.headers['content-type'] !== 'application/json') {
             return res.status(406).send({
                 status: 406,
                 error: 'Content type should be application/json'
-            }) 
+            })
         }
-        if(!Object.keys(updateObj).length) {        
+        if (!Object.keys(updateObj).length) {
             return res.status(400).send({
                 status: 400,
                 error: 'The update object is empty'
-            }) 
+            })
         }
-        
+
         try {
-            const user = req.user       
+            const user = req.user
             updates.forEach((update) => user[update] = updateObj[update])
             await user.save()
             res.status(200).send({
@@ -102,7 +105,7 @@ class Users{
             res.status(400).send({
                 status: 400,
                 error
-            }) 
+            })
         }
     }
 
@@ -115,26 +118,26 @@ class Users{
                 message: 'successfully removed.. ',
                 data: req.user
             })
-            
+
         } catch (error) {
             res.status(500).send({
                 status: 500,
                 error: error
-            })  
+            })
         }
     }
 
     static async loginUser(req, res) {
         try {
-            const user = await User.findByCredentials(req.body.email, req.body.password)  
-            const token = await user.generateAuthToken()        
+            const user = await User.findByCredentials(req.body.email, req.body.password)
+            const token = await user.generateAuthToken()
             res.status(200).send({
                 status: 200,
                 message: 'Logged in successfully!!',
                 data: user,
                 token
             })
-    
+
         } catch (error) {
             res.status(400).send({
                 status: 400,
@@ -156,7 +159,7 @@ class Users{
             res.status(500).send({
                 error
             })
-        } 
+        }
     }
 
     static async logoutAllDevices(req, res) {
@@ -166,7 +169,7 @@ class Users{
             await req.user.save()
             res.send({
                 message: 'logged out all'
-            }) 
+            })
         } catch (error) {
             res.status(500).send({
                 error
@@ -175,7 +178,7 @@ class Users{
     }
 
     static async deleteAvatar(req, res) {
-        if(!req.user.avatar) {
+        if (!req.user.avatar) {
             return res.send({
                 Message: 'User has no avatar'
             })
@@ -190,7 +193,7 @@ class Users{
     static async getAvatar(req, res) {
         try {
             const user = await User.findById(req.params.id)
-            if(!user || !user.avatar) {
+            if (!user || !user.avatar) {
                 return res.status(404).send({
                     error: 'No image found'
                 })
@@ -199,7 +202,7 @@ class Users{
             res.send(user.avatar)
         } catch (error) {
             res.status(400).send()
-            
+
         }
     }
 }
