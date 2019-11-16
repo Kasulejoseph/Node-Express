@@ -48,15 +48,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kasulejoseph/Node-Class.git"
+    "url": "git+https://github.com/Kasulejoseph/Node-Express.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Kasulejoseph/Node-Class/issues"
+    "url": "https://github.com/Kasulejoseph/Node-Express/issues"
   },
-  "homepage": "https://github.com/Kasulejoseph/Node-Class#readme",
+  "homepage": "https://github.com/Kasulejoseph/Node-Express#readme",
   "nyc": {
     "all": true,
     "include": [
