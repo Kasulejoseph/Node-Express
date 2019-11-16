@@ -11,6 +11,7 @@ import {
 beforeEach(setupDatabase)
 afterAll(clearUser)
 
+
 test('user should create a account', async () => {
     const response = await request(app).post('/users').send({
         name: 'kasule',
