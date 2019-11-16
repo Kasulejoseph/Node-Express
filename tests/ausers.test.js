@@ -10,6 +10,7 @@ import {
 
 beforeEach(setupDatabase)
 afterAll(clearUser)
+beforeAll(clearUser)
 
 
 test('user should create a account', async () => {
