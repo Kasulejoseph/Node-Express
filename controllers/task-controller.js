@@ -6,11 +6,8 @@ class Tasks {
     }
     static async readTask(req, res) {
         try {
-            // const tasks = await Task.find({ author: req.user._id})
+            const tasks = await Task.find({ author: req.user._id})
             let count = 0
-            if (req.user.tasks) {
-                count = await req.user.tasks.length
-            }
             const paginateObj = paginate(req)
             await req.user.populate({
                 path: 'tasks',
@@ -21,6 +18,9 @@ class Tasks {
                     sort: paginateObj.sort
                 }
             }).execPopulate()
+            if (req.user.tasks) {
+                count = tasks.length                
+            }
             res.status(200).send({
                 status: 200,
                 meta: {

@@ -25,7 +25,7 @@ test('should get all tasks for a single user', async() => {
         .send()
         .expect(200)
 
-    expect(response.body.task_count).toEqual(2)
+    expect(response.body.meta.count).toEqual(2)
 })
 
 test('should not delete tasks which they doesnt below to them', async() => {
