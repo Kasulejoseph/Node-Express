@@ -4,14 +4,10 @@ import User from '../models/user'
 import {
     userId,
     loggedUser,
-    setupDatabase,
-    clearUser
+    setupDatabase
 } from './fixtures/db'
 
 beforeEach(setupDatabase)
-afterAll(clearUser)
-beforeAll(clearUser)
-
 
 test('user should create a account', async () => {
     const response = await request(app).post('/users').send({

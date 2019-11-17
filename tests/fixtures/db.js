@@ -62,15 +62,10 @@ const setupDatabase = async () => {
     await new Task(taskTwo).save()
 }
 
-const clearUser = async () => {
-    await User.deleteMany()
-}
-
 export {
     userId,
     loggedUser,
     loggedUser2,
     taskOne,
-    setupDatabase,
-    clearUser
+    setupDatabase
 }
